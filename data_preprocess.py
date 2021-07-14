@@ -7,7 +7,6 @@ from tqdm import tqdm
 face_data = '/home/seongjae/Downloads/CelebAMask-HQ/CelebA-HQ-img'
 face_sep_mask = '/home/seongjae/Downloads/CelebAMask-HQ/CelebAMask-HQ-mask-anno'
 mask_path = '/home/seongjae/Downloads/CelebAMask-HQ/mask'
-# mask_path = '.'
 counter = 0
 total = 0
 

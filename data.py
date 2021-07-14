@@ -38,10 +38,13 @@ if __name__ == '__main__':
     img_dir = '/home/seongjae/Downloads/CelebAMask-HQ/CelebA-HQ-img'    
     annt_dir = '/home/seongjae/Downloads/CelebAMask-HQ/CelebAMask-HQ-mask-anno'
     dataset = MaskDataset(img_dir, annt_dir)
-    print(len(dataset))
-
     data_loader = DataLoader(dataset, batch_size=2, shuffle=False, num_workers=0)
 
+    # data intergrity check
+    for _ in data_loader:
+        pass
+
+    # data visualization
     for batch in data_loader:
         x, y = batch
 
@@ -53,5 +56,6 @@ if __name__ == '__main__':
 
         break
 
+    # attr
     atts = ['skin', 'l_brow', 'r_brow', 'l_eye', 'r_eye', 'eye_g', 'l_ear', 'r_ear', 'ear_r',
                 'nose', 'mouth', 'u_lip', 'l_lip', 'neck', 'neck_l', 'cloth', 'hair', 'hat']

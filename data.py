@@ -16,6 +16,7 @@ class dataset(Dataset):
     def __getitem__(self, idx):
         img_path = self.imgs[idx]
 
+
         pass
 
 if __name__ == '__main__':
@@ -29,3 +30,6 @@ if __name__ == '__main__':
     annt = '/home/seongjae/Downloads/CelebAMask-HQ/CelebAMask-HQ-mask-anno'
     annts = glob(f"{annt}/**/*.png")
     print(len(annts))
+
+    atts = ['skin', 'l_brow', 'r_brow', 'l_eye', 'r_eye', 'eye_g', 'l_ear', 'r_ear', 'ear_r',
+                'nose', 'mouth', 'u_lip', 'l_lip', 'neck', 'neck_l', 'cloth', 'hair', 'hat']

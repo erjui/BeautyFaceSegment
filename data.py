@@ -1,7 +1,7 @@
 import torch
 from glob import glob
 from torch.utils.data import Dataset, DataLoader, Subset
-from PIL import Image
+import cv2
 
 from torchvision.transforms import transforms
 
@@ -21,11 +21,12 @@ class MaskDataset(Dataset):
 
     def __getitem__(self, idx):
         img_path = self.imgs[idx]
-        img = Image.open(img_path)
-        img.resize((512, 512), Image.BILINEAR)
+        img = cv2.imread(img_path)
+        img = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
+        img = cv2.resize(img, dsize=(512, 512), interpolation=cv2.INTER_AREA)
 
         label_path = self.annts[idx]
-        label = Image.open(label_path)
+        label = cv2.imread(label_path, cv2.IMREAD_GRAYSCALE)
 
         img = transform(img)
         label = torch.tensor(label, dtype=torch.int64)

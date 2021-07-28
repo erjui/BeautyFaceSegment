@@ -35,8 +35,8 @@ class MaskDataset(Dataset):
 if __name__ == '__main__':
     print('Dataset Validation 👻')
 
-    img_dir = '/home/seongjae/Downloads/CelebAMask-HQ/CelebA-HQ-img'    
-    annt_dir = '/home/seongjae/Downloads/CelebAMask-HQ/CelebAMask-HQ-mask-anno'
+    img_dir = '/home/seongjae/MyDataset/CelebAMask-HQ/CelebA-HQ-img'    
+    annt_dir = '/home/seongjae/MyDataset/CelebAMask-HQ/CelebAMask-HQ-mask-anno'
     dataset = MaskDataset(img_dir, annt_dir)
     data_loader = DataLoader(dataset, batch_size=2, shuffle=False, num_workers=0)
 

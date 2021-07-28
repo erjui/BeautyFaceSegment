@@ -104,7 +104,7 @@ class Trainer:
                 self.save_checkpoint()
 
 if __name__ == '__main__':
-    print('hello, world')
+    print('Start training 🚀')
 
     # config
     c = TrainerConfig()
@@ -115,11 +115,12 @@ if __name__ == '__main__':
 
     # train & valid data
     from data import MaskDataset
-    img_dir = '/home/seongjae/Downloads/CelebAMask-HQ/CelebA-HQ-img'    
-    annt_dir = '/home/seongjae/Downloads/CelebAMask-HQ/CelebAMask-HQ-mask-anno'
+    img_dir = '/home/seongjae/MyDataset/CelebAMask-HQ/CelebA-HQ-img'    
+    annt_dir = '/home/seongjae/MyDataset/CelebAMask-HQ/CelebAMask-HQ-mask-anno'
     train_dataset = MaskDataset(img_dir, annt_dir, 'train')
     valid_dataset = MaskDataset(img_dir, annt_dir, 'valid')
 
     # train
-    traner = Trainer(model, train_dataset, valid_dataset, c)
+    trainer = Trainer(model, train_dataset, valid_dataset, c)
 
+    trainer.train()

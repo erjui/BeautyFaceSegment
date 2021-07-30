@@ -1,5 +1,6 @@
 import math
 import logging
+from torch.utils.data.dataset import random_split
 
 from tqdm import tqdm
 import numpy as np
@@ -116,9 +117,10 @@ if __name__ == '__main__':
     # train & valid data
     from data import MaskDataset
     img_dir = '/home/seongjae/MyDataset/CelebAMask-HQ/CelebA-HQ-img'    
-    annt_dir = '/home/seongjae/MyDataset/CelebAMask-HQ/CelebAMask-HQ-mask-anno'
-    train_dataset = MaskDataset(img_dir, annt_dir, 'train')
-    valid_dataset = MaskDataset(img_dir, annt_dir, 'valid')
+    annt_dir = '/home/seongjae/MyDataset/CelebAMask-HQ/mask'
+
+    dataset = MaskDataset(img_dir, annt_dir)
+    train_dataset, valid_dataset = random_split(dataset, [24000, 6000], generator=torch.Generator().manual_seed(0))
 
     # train
     trainer = Trainer(model, train_dataset, valid_dataset, c)

@@ -1,6 +1,6 @@
 import torch
 from glob import glob
-from torch.utils.data import Dataset, DataLoader, Subset
+from torch.utils.data import Dataset, DataLoader, Subset, random_split
 import cv2
 
 from torchvision.transforms import transforms
@@ -73,8 +73,10 @@ if __name__ == '__main__':
     img_dir = '/home/seongjae/MyDataset/CelebAMask-HQ/CelebA-HQ-img'    
     annt_dir = '/home/seongjae/MyDataset/CelebAMask-HQ/mask'
     dataset = MaskDataset(img_dir, annt_dir)
-    dataset = Subset(dataset, range(1000))
+    # dataset = Subset(dataset, range(1000))
     data_loader = DataLoader(dataset, batch_size=2, shuffle=False, num_workers=0)
+
+    print(len(dataset))
 
     # data intergrity check
     # from tqdm import tqdm

@@ -33,7 +33,7 @@ class MaskDataset(Dataset):
 
         return img, label
 
-from utils import labelVisualize
+from utils import labelVisualize, color_dict
 
 if __name__ == '__main__':
     print('Dataset Validation 👻')

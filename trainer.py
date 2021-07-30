@@ -80,7 +80,7 @@ class Trainer:
                     losses.append(loss.item())
 
                 if is_train:
-                    model.zero_grad() # optimizer.zero_grad()
+                    optimizer.zero_grad()
                     loss.backward()
                     optimizer.step()
                     lr_scheduler.step()

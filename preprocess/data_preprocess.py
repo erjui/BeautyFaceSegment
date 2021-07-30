@@ -4,9 +4,9 @@ import numpy as np
 from PIL import Image
 from tqdm import tqdm
 
-face_data = '/home/seongjae/Downloads/CelebAMask-HQ/CelebA-HQ-img'
-face_sep_mask = '/home/seongjae/Downloads/CelebAMask-HQ/CelebAMask-HQ-mask-anno'
-mask_path = '/home/seongjae/Downloads/CelebAMask-HQ/mask'
+face_data = '/home/seongjae/MyDataset/CelabA/CelebAMask-HQ/CelebA-HQ-img'
+face_sep_mask = '/home/seongjae/MyDataset/CelabA/CelebAMask-HQ/CelebAMask-HQ-mask-anno'
+mask_path = '/home/seongjae/MyDataset/CelabA/CelebAMask-HQ/mask'
 counter = 0
 total = 0
 

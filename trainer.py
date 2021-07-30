@@ -18,14 +18,14 @@ fix_seed(0)
 class TrainerConfig:
     # model config
     in_channels = 3
-    out_channels = 18
+    out_channels = 19
 
     # optimization parameters
     max_epochs = 10
     batch_size = 64
     learning_rate = 3e-4
     weight_decay = 0.1
-    num_workers = 0
+    num_workers = 4
 
     # checkpoint settings
     ckpt_path = None

@@ -12,9 +12,13 @@ transform = transforms.Compose([
 ])
 
 class MaskDataset(Dataset):
-    def __init__(self, img_dir, annt_dir, split='train'):
+    def __init__(self, img_dir, annt_dir):
         self.imgs = sorted(glob(f"{img_dir}/*.jpg"))
         self.annts = sorted(glob(f"{annt_dir}/*.png"))
+
+        print(f"Number of training images: {len(self.imgs)}")
+        print(f"Number of annotation images: {len(self.annts)}")
+
 
     def __len__(self):
         return len(self.imgs)
@@ -39,8 +43,8 @@ if __name__ == '__main__':
     print('Dataset Validation 👻')
 
     num_labels = 19 # background + 18 classes
-    img_dir = '/home/seongjae/MyDataset/CelebAMask-HQ/CelebA-HQ-img'    
-    annt_dir = '/home/seongjae/MyDataset/CelebAMask-HQ/mask'
+    img_dir = '/home/seongjae/MyDataset/CelabA/CelebAMask-HQ/CelebA-HQ-img'    
+    annt_dir = '/home/seongjae/MyDataset/CelabA/CelebAMask-HQ/mask'
     dataset = MaskDataset(img_dir, annt_dir)
     # dataset = Subset(dataset, range(1000))
     data_loader = DataLoader(dataset, batch_size=2, shuffle=False, num_workers=0)

@@ -22,8 +22,10 @@ class TrainerConfig:
 
     # optimization parameters
     max_epochs = 10
+    max_epochs = 800
     batch_size = 64
-    learning_rate = 3e-4
+    # learning_rate = 3e-4
+    learning_rate = 1e-3
     weight_decay = 0.1
     num_workers = 4
 
@@ -60,7 +62,7 @@ class Trainer:
         # optimizer = raw_model.configure_optimizers(config)
         optimizer = torch.optim.Adam(model.parameters(), lr=config.learning_rate, weight_decay=config.weight_decay)
         criterion = torch.nn.CrossEntropyLoss()
-        lr_scheduler = MultiStepLR(optimizer, milestones=[5], gamma=0.1)
+        lr_scheduler = MultiStepLR(optimizer, milestones=[1e10], gamma=0.1)
 
         def run_epoch(split):
             is_train = split == 'train'
@@ -86,7 +88,20 @@ class Trainer:
                     lr_scheduler.step()
 
                     # report progress
+                    print(f"epoch {epoch+1} iter {it}: train loss {loss.item():.5f}. lr {lr_scheduler.get_last_lr()}")
                     pbar.set_description(f"epoch {epoch+1} iter {it}: train loss {loss.item():.5f}. lr {lr_scheduler.get_last_lr()}")
+
+            if epoch % 100 == 0:
+                # img = x[0].cpu().detach().permute(1, 2, 0).numpy()
+                import torch.nn.functional as F
+                out = F.softmax(logits[0], dim=0)
+                out = torch.argmax(out, dim=0).cpu().detach().numpy()
+                
+                import cv2
+                from utils import color_dict, labelVisualize
+                # img = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
+                # cv2.imwrite(f'img_{epoch}.jpg', np.uint8((img+1)/2 * 255.0))
+                cv2.imwrite(f'out_{epoch}.jpg', (labelVisualize(19, color_dict, out) * 255.0).astype(np.uint8))
 
             if not is_train:
                 valid_loss = float(np.mean(losses))
@@ -116,13 +131,20 @@ if __name__ == '__main__':
 
     # train & valid data
     from data import MaskDataset
-    img_dir = '/home/seongjae/MyDataset/CelebAMask-HQ/CelebA-HQ-img'    
-    annt_dir = '/home/seongjae/MyDataset/CelebAMask-HQ/mask'
+    img_dir = '/home/seongjae/MyDataset/CelabA/CelebAMask-HQ/CelebA-HQ-img'    
+    annt_dir = '/home/seongjae/MyDataset/CelabA/CelebAMask-HQ/mask'
 
+    # dataset = MaskDataset(img_dir, annt_dir)
+    # train_dataset, valid_dataset = random_split(dataset, [24000, 6000], generator=torch.Generator().manual_seed(0))
+    
+
+    # One sample overfitting
+    from torch.utils.data import Subset
     dataset = MaskDataset(img_dir, annt_dir)
-    train_dataset, valid_dataset = random_split(dataset, [24000, 6000], generator=torch.Generator().manual_seed(0))
+    dataset = Subset(dataset, range(1))
+    trainer = Trainer(model, dataset, None, c)
 
     # train
-    trainer = Trainer(model, train_dataset, valid_dataset, c)
+    # trainer = Trainer(model, train_dataset, valid_dataset, c)
 
     trainer.train()

@@ -22,7 +22,7 @@ class TrainerConfig:
 
     # optimization parameters
     max_epochs = 10
-    max_epochs = 800
+    max_epochs = 2000
     batch_size = 64
     # learning_rate = 3e-4
     learning_rate = 1e-3
@@ -62,7 +62,7 @@ class Trainer:
         # optimizer = raw_model.configure_optimizers(config)
         optimizer = torch.optim.Adam(model.parameters(), lr=config.learning_rate, weight_decay=config.weight_decay)
         criterion = torch.nn.CrossEntropyLoss()
-        lr_scheduler = MultiStepLR(optimizer, milestones=[1e10], gamma=0.1)
+        lr_scheduler = MultiStepLR(optimizer, milestones=[300, 800, 1500], gamma=0.1)
 
         def run_epoch(split):
             is_train = split == 'train'
@@ -101,6 +101,8 @@ class Trainer:
                 from utils import color_dict, labelVisualize
                 # img = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
                 # cv2.imwrite(f'img_{epoch}.jpg', np.uint8((img+1)/2 * 255.0))
+                # y = y[0].cpu().detach().numpy()
+                # cv2.imwrite(f'label_{epoch}.jpg', (labelVisualize(19, color_dict, y) * 255.0).astype(np.uint8))
                 cv2.imwrite(f'out_{epoch}.jpg', (labelVisualize(19, color_dict, out) * 255.0).astype(np.uint8))
 
             if not is_train:

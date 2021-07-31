@@ -75,7 +75,7 @@ class Trainer:
                 y = y.to(self.device)
 
                 with torch.set_grad_enabled(is_train):
-                    logits = model(x, y)
+                    logits = model(x)
                     loss = criterion(logits, y)
                     losses.append(loss.item())
 

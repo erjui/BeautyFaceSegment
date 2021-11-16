@@ -19,7 +19,6 @@ class MaskDataset(Dataset):
         print(f"Number of training images: {len(self.imgs)}")
         print(f"Number of annotation images: {len(self.annts)}")
 
-
     def __len__(self):
         return len(self.imgs)
 

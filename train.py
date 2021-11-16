@@ -62,7 +62,7 @@ class Trainer:
         # optimizer = raw_model.configure_optimizers(config)
         optimizer = torch.optim.Adam(model.parameters(), lr=config.learning_rate, weight_decay=config.weight_decay)
         criterion = torch.nn.CrossEntropyLoss()
-        lr_scheduler = MultiStepLR(optimizer, milestones=[300, 800, 1500], gamma=0.1)
+        lr_scheduler = MultiStepLR(optimizer, milestones=[300, 600, 800], gamma=0.1)
 
         def run_epoch(split):
             is_train = split == 'train'
@@ -103,7 +103,7 @@ class Trainer:
                 # cv2.imwrite(f'img_{epoch}.jpg', np.uint8((img+1)/2 * 255.0))
                 # y = y[0].cpu().detach().numpy()
                 # cv2.imwrite(f'label_{epoch}.jpg', (labelVisualize(19, color_dict, y) * 255.0).astype(np.uint8))
-                cv2.imwrite(f'out_{epoch}.jpg', (labelVisualize(19, color_dict, out) * 255.0).astype(np.uint8))
+                cv2.imwrite(f'asset/out_{epoch}.jpg', (labelVisualize(19, color_dict, out) * 255.0).astype(np.uint8))
 
             if not is_train:
                 valid_loss = float(np.mean(losses))

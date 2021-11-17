@@ -189,3 +189,4 @@ cython_debug/
 .envrc
 *.jpg
 *.png
+lightning_logs/

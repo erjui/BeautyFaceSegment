@@ -67,11 +67,15 @@ if __name__ == '__main__':
     annt_dir = '/home/seongjae/MyDataset/CelabA/CelebAMask-HQ/mask'
 
     from torch.utils.data import Dataset, DataLoader, Subset
+    from torch.utils.data import random_split
     dataset = MaskDataset(img_dir, annt_dir)
+    train_dataset, valid_dataset = random_split(dataset, [24000, 6000], generator=torch.Generator().manual_seed(42))
     # dataset = Subset(dataset, range(12))
-    data_loader = DataLoader(dataset, batch_size=4, shuffle=False, num_workers=0)
+    train_loader = DataLoader(train_dataset, batch_size=32, shuffle=True, num_workers=6, pin_memory=True, drop_last=True)
+    valid_loader = DataLoader(valid_dataset, batch_size=32, shuffle=False, num_workers=6, pin_memory=True, drop_last=True)
 
-    print(f"Total number of dataset: {len(dataset)}")
+    print(f"Total number of train dataset: {len(train_dataset)}")
+    print(f"Total number of valid dataset: {len(valid_dataset)}")
 
     # training
     pl.seed_everything(42)
@@ -102,7 +106,7 @@ if __name__ == '__main__':
     )
     trainer.fit(
         model=lighting_model,
-        train_dataloader=data_loader,
-        val_dataloaders=data_loader,
+        train_dataloader=train_loader,
+        val_dataloaders=valid_loader,
         # ckpt_path=".chpt", # for resuming training
     )

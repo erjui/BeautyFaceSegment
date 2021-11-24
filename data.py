@@ -48,6 +48,7 @@ class MaskDataset(Dataset):
         label = cv2.imread(label_path, cv2.IMREAD_GRAYSCALE)
         label = cv2.resize(label, dsize=(512, 512), interpolation=cv2.INTER_NEAREST)
 
+        # TODO: do augmentation only on train split
         im_lb = {'im': img, 'lb': label}
         im_lb = self.train_aug(im_lb)
         img, label = im_lb['im'], im_lb['lb']

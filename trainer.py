@@ -68,8 +68,17 @@ if __name__ == '__main__':
 
     from torch.utils.data import Dataset, DataLoader, Subset
     from torch.utils.data import random_split
-    dataset = MaskDataset(img_dir, annt_dir)
-    train_dataset, valid_dataset = random_split(dataset, [24000, 6000], generator=torch.Generator().manual_seed(42))
+    from glob import glob
+
+    imgs = sorted(glob(f"{img_dir}/*.jpg"))
+    annts = sorted(glob(f"{annt_dir}/*.png"))
+
+    train_imgs, valid_imgs = imgs[:24000], imgs[24000:]
+    train_annts, valid_annts = annts[:24000], annts[24000:]
+
+    train_dataset = MaskDataset(train_imgs, train_annts, split='train')
+    valid_dataset = MaskDataset(valid_imgs, valid_annts, split='valid')
+    # train_dataset, valid_dataset = random_split(dataset, [24000, 6000], generator=torch.Generator().manual_seed(42))
     # dataset = Subset(dataset, range(12))
     train_loader = DataLoader(train_dataset, batch_size=32, shuffle=True, num_workers=6, pin_memory=True, drop_last=True)
     valid_loader = DataLoader(valid_dataset, batch_size=32, shuffle=False, num_workers=6, pin_memory=True, drop_last=True)

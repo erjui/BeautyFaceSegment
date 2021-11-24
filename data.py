@@ -2,6 +2,7 @@ import torch
 from glob import glob
 from torch.utils.data import Dataset, DataLoader, Subset, random_split
 import cv2
+import random
 
 from torchvision.transforms import transforms
 
@@ -11,10 +12,25 @@ transform = transforms.Compose([
     transforms.Normalize(*normalize)
 ])
 
+# atts = [1 'skin', 2 'l_brow', 3 'r_brow', 4 'l_eye', 5 'r_eye', 6 'eye_g', 7 'l_ear', 8 'r_ear', 9 'ear_r',
+#         10 'nose', 11 'mouth', 12 'u_lip', 13 'l_lip', 14 'neck', 15 'neck_l', 16 'cloth', 17 'hair', 18 'hat']
+
 class MaskDataset(Dataset):
     def __init__(self, img_dir, annt_dir):
         self.imgs = sorted(glob(f"{img_dir}/*.jpg"))
         self.annts = sorted(glob(f"{annt_dir}/*.png"))
+
+        from data_aug import ColorJitter, HorizontalFlip, RandomScale, RandomCrop
+
+        self.train_aug = transforms.Compose([
+            ColorJitter(
+                brightness=0.5,
+                contrast=0.5,
+                saturation=0.5),
+            HorizontalFlip(),
+            RandomScale((0.75, 1.0, 1.25, 1.5, 1.75, 2.0)),
+            RandomCrop((512, 512))
+            ])
 
         print(f"Number of training images: {len(self.imgs)}")
         print(f"Number of annotation images: {len(self.annts)}")
@@ -23,8 +39,6 @@ class MaskDataset(Dataset):
         return len(self.imgs)
 
     def __getitem__(self, idx):
-        # TODO: implement data augmentation
-
         img_path = self.imgs[idx]
         img = cv2.imread(img_path)
         img = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
@@ -32,6 +46,12 @@ class MaskDataset(Dataset):
 
         label_path = self.annts[idx]
         label = cv2.imread(label_path, cv2.IMREAD_GRAYSCALE)
+        label = cv2.resize(label, dsize=(512, 512), interpolation=cv2.INTER_NEAREST)
+
+        # TODO: do augmentation only on train split
+        im_lb = {'im': img, 'lb': label}
+        im_lb = self.train_aug(im_lb)
+        img, label = im_lb['im'], im_lb['lb']
 
         img = transform(img)
         label = torch.tensor(label, dtype=torch.int64)
@@ -44,8 +64,8 @@ if __name__ == '__main__':
     print('Dataset Validation 👻')
 
     num_labels = 19 # background + 18 classes
-    img_dir = '/home/seongjae/MyDataset/CelabA/CelebAMask-HQ/CelebA-HQ-img'    
-    annt_dir = '/home/seongjae/MyDataset/CelabA/CelebAMask-HQ/mask'
+    img_dir = '/home/seongjae/MyDataset/celebA/CelebAMask-HQ/CelebA-HQ-img'    
+    annt_dir = '/home/seongjae/MyDataset/celebA/CelebAMask-HQ/mask'
     dataset = MaskDataset(img_dir, annt_dir)
     # dataset = Subset(dataset, range(1000))
     data_loader = DataLoader(dataset, batch_size=2, shuffle=False, num_workers=0)

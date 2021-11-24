@@ -8,6 +8,8 @@ import pytorch_lightning as pl
 from pytorch_lightning.callbacks import ModelCheckpoint, ModelSummary
 from pytorch_lightning.loggers import WandbLogger
 
+from schedule import GradualWarmupScheduler
+
 class SegmentModel(pl.LightningModule):
     # TODO: use epic optimizer
 
@@ -46,8 +48,8 @@ class SegmentModel(pl.LightningModule):
 
     def configure_optimizers(self):
         optimizer = torch.optim.Adam(self.parameters(), lr=7e-3)
-        # TODO: cosine scheduling
-        scheduler = MultiStepLR(optimizer, milestones=[10, 60, 90], gamma=0.1)
+        cosine_scheduler = torch.optim.lr_scheduler.CosineAnnealingLR(optimizer, self.trainer.max_epochs, eta_min=0, last_epoch=-1)
+        scheduler = GradualWarmupScheduler(optimizer, multiplier=1.0, total_epoch=10, after_scheduler=cosine_scheduler)
         return {
             "optimizer": optimizer,
             "lr_scheduler": {

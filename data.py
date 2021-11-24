@@ -16,9 +16,13 @@ transform = transforms.Compose([
 #         10 'nose', 11 'mouth', 12 'u_lip', 13 'l_lip', 14 'neck', 15 'neck_l', 16 'cloth', 17 'hair', 18 'hat']
 
 class MaskDataset(Dataset):
-    def __init__(self, img_dir, annt_dir):
-        self.imgs = sorted(glob(f"{img_dir}/*.jpg"))
-        self.annts = sorted(glob(f"{annt_dir}/*.png"))
+    def __init__(self, imgs, annts, split='train'):
+        # self.imgs = sorted(glob(f"{img_dir}/*.jpg"))
+        # self.annts = sorted(glob(f"{annt_dir}/*.png"))
+        
+        self.imgs = imgs
+        self.annts = annts
+        self.split = split
 
         from data_aug import ColorJitter, HorizontalFlip, RandomScale, RandomCrop
 
@@ -48,10 +52,10 @@ class MaskDataset(Dataset):
         label = cv2.imread(label_path, cv2.IMREAD_GRAYSCALE)
         label = cv2.resize(label, dsize=(512, 512), interpolation=cv2.INTER_NEAREST)
 
-        # TODO: do augmentation only on train split
-        im_lb = {'im': img, 'lb': label}
-        im_lb = self.train_aug(im_lb)
-        img, label = im_lb['im'], im_lb['lb']
+        if self.split == 'train':
+            im_lb = {'im': img, 'lb': label}
+            im_lb = self.train_aug(im_lb)
+            img, label = im_lb['im'], im_lb['lb']
 
         img = transform(img)
         label = torch.tensor(label, dtype=torch.int64)

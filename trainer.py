@@ -92,7 +92,7 @@ if __name__ == '__main__':
 
     lighting_model = SegmentModel()
     callbacks = [
-        ModelCheckpoint(monitor="valid_loss"),
+        ModelCheckpoint(monitor="valid_loss", dirpath="ckpt"),
         ModelSummary(),
     ]
     wandb_logger = WandbLogger(project="face-segment")

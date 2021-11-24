@@ -64,8 +64,8 @@ if __name__ == '__main__':
     print('Dataset Validation 👻')
 
     num_labels = 19 # background + 18 classes
-    img_dir = '/home/seongjae/MyDataset/CelabA/CelebAMask-HQ/CelebA-HQ-img'    
-    annt_dir = '/home/seongjae/MyDataset/CelabA/CelebAMask-HQ/mask'
+    img_dir = '/home/seongjae/MyDataset/celebA/CelebAMask-HQ/CelebA-HQ-img'    
+    annt_dir = '/home/seongjae/MyDataset/celebA/CelebAMask-HQ/mask'
     dataset = MaskDataset(img_dir, annt_dir)
     # dataset = Subset(dataset, range(1000))
     data_loader = DataLoader(dataset, batch_size=2, shuffle=False, num_workers=0)

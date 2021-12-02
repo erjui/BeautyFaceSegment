@@ -190,3 +190,4 @@ cython_debug/
 *.jpg
 *.png
 lightning_logs/
+checkpoints/

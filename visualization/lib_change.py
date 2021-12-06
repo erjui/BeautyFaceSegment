@@ -25,7 +25,7 @@ transform = transforms.Compose([
 ])
 
 model = SegmentModel.load_from_checkpoint('../checkpoints/epoch=84-step=148749.ckpt')
-model.cuda()
+model.cpu()
 model.eval()
 
 # Lib color changer
@@ -55,8 +55,8 @@ if __name__ == '__main__':
         img = cv2.resize(img, dsize=(512, 512), interpolation=cv2.INTER_CUBIC)
 
         img_t = transform(img).unsqueeze(0)
-        out_t = model(img_t.cuda())
-        out = out_t[0].cpu().numpy()
+        out_t = model(img_t)
+        out = out_t[0].numpy()
 
         out_v = labelVisualize(out, num_class=18)
         out_v = np.uint8(out_v * 255.0)

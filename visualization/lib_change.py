@@ -1,18 +1,10 @@
-import os
-import torch
-import torchvision
-import segmentation_models_pytorch as smp
-
-from torchvision import transforms
-
+import cv2
+import sys
+import face_recognition
+import numpy as np
 from tqdm import tqdm
 from glob import glob
-
-
-import cv2
-import numpy as np
-import face_recognition
-import sys
+from torchvision import transforms
 
 sys.path.append('../')
 from trainer import SegmentModel

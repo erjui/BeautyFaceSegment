@@ -42,6 +42,7 @@ if __name__ == '__main__':
         face_location = face_locations[0]
         top, right, bottom, left = face_location
 
+        org_img = img.copy()
         img = img[top:bottom, left:right]
         img = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
         img = cv2.resize(img, dsize=(512, 512), interpolation=cv2.INTER_CUBIC)
@@ -56,4 +57,15 @@ if __name__ == '__main__':
 
         cv2.namedWindow('img', cv2.WINDOW_NORMAL)
         cv2.imshow('img', np.hstack([img, out_v, img_result]))
+        cv2.waitKey(0)
+
+        print(org_img.shape)
+
+        org_img = cv2.cvtColor(org_img, cv2.COLOR_BGR2RGB)
+        out_big = org_img.copy()
+        result_patch = cv2.resize(img_result, dsize=(right-left, bottom-top), interpolation=cv2.INTER_CUBIC)
+        out_big[top:bottom, left:right] = result_patch
+
+        cv2.namedWindow('img', cv2.WINDOW_NORMAL)
+        cv2.imshow('img', np.hstack([org_img, out_big]))
         cv2.waitKey(0)

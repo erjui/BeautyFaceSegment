@@ -12,6 +12,9 @@ def fix_seed(seed):
     torch.backends.cudnn.benchmark = False # cudnn
 
 # color dictionary
+# atts = [1 'skin', 2 'l_brow', 3 'r_brow', 4 'l_eye', 5 'r_eye', 6 'eye_g', 7 'l_ear', 8 'r_ear', 9 'ear_r',
+#         10 'nose', 11 'mouth', 12 'u_lip', 13 'l_lip', 14 'neck', 15 'neck_l', 16 'cloth', 17 'hair', 18 'hat']
+
 color_dict = {
     0: (0, 0, 0),
     1: (128, 64, 128),
